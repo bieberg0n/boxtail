@@ -1,0 +1,19 @@
+{
+  "name": "boxtail",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.1.1",
+    "html-webpack-plugin": "^4.5.0",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "scripts": {
+    "compile": "webpack --config webpack.config.js",
+    "dev": "webpack-dev-server --config webpack.config.dev.js"
+  }
+}

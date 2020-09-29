@@ -1,6 +1,11 @@
-class Aircraft extends Sprite {
-    constructor (game, scene) {
-        super(game, 'aircraft')
+import {GuaGame, GuaScene, Sprite} from "../../guagame";
+
+export default class People extends Sprite {
+    scene: GuaScene
+    alive: boolean
+
+    constructor (game: GuaGame, scene: GuaScene) {
+        super(game, 'people')
 
         this.game = game
         this.scene = scene
@@ -13,13 +18,6 @@ class Aircraft extends Sprite {
         game.bindKeyPress('d', this.moveRightInside)
         game.bindKeyPress('w', () => this.moveUpInside())
         game.bindKeyPress('s', () => this.moveDownInside())
-    }
-
-    break = () => {
-        this.alive = false
-        let boom = new Boom(this.game, 'bullet2', this.x+this.w/2, this.y+this.h/2)
-        this.scene.booms.push(boom)
-        this.x = -100
     }
 
     draw = () => {

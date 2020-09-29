@@ -1,18 +1,16 @@
-import {e, log} from './guagame/utils'
+import {GuaGame, GuaScene, log} from './guagame'
+import SceneMain from './scene'
 
-const main = function() {
+const main = async function() {
     let imgs = {
+        'people': 'img/people.png'
     }
 
-    // let game = new GuaGame(30, 800,600 , true)
-    // await game.loadImg(imgs)
-    //
-    // let scene = new SceneMain(game)
-    // game.runWithScene(scene)
-    let canvas = e('canvas') as HTMLCanvasElement
-    let ctx = canvas.getContext('2d')!
-    ctx.fillStyle = '#fff'
-    ctx.fillRect(0, 0, 800, 600)
+    let game = new GuaGame(30, 800,600 , true)
+    await game.loadImg(imgs)
+
+    let scene = new SceneMain(game)
+    game.runWithScene(scene)
 }
 
 main()

@@ -16,14 +16,14 @@ module.exports = {
         contentBase: './dist/',
     },
     plugins: [
-        new CopyWebpackPlugin({
-            patterns: [
-                {from: "./game.html"}
-            ]
-        }),
         new htmlWebpackPlugin({
             filename: 'game.html',
-            template: './game.html'
+            template: './public/game.html',
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: "*/*", context: './public/'},
+            ]
         }),
     ]
 }

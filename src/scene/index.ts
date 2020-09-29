@@ -1,16 +1,25 @@
-class SceneMain extends GuaScene {
-    constructor(game) {
+import {GuaGame, GuaScene, Sprite} from '../guagame'
+import People from './sprite/people'
+
+export default class SceneMain extends GuaScene {
+    gamestart: boolean
+    gameover: boolean
+    sprites: Sprite[]
+
+    constructor(game: GuaGame) {
         super(game)
 
         this.gamestart = false
         this.gameover = false
-
-        game.bindKeyPress(' ', this.attack)
+        this.sprites = [
+            new People(this.game, this)
+        ]
     }
 
-    sprites = () => {
-        return []
-    }
+    // sprites = () => {
+    //     return [
+    //     ]
+    // }
 
     toEnd = () => {
         // this.aircraft.break()
@@ -35,7 +44,7 @@ class SceneMain extends GuaScene {
 
     draw = () => {
         this.drawBackground()
-        // this.sprites().forEach(s => s.draw())
+        this.sprites.forEach(s => s.draw())
 
         // let ctx = this.game.context
         // ctx.font = "30px anti-serif"

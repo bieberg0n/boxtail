@@ -1,8 +1,22 @@
-class Sprite {
-    constructor (game, name) {
+import GuaGame from "./gua_game"
+import {collide, rangeLimit} from './utils'
+
+export default class Sprite {
+    game: GuaGame
+    name: string
+    image: HTMLImageElement
+    w: number
+    h: number
+    x: number
+    y: number
+    speed: number
+    fired: boolean
+    enableDrag: boolean
+    
+    constructor (game: GuaGame, name: string) {
         this.game = game
         this.name = name
-        this.image = game.images[name]
+        this.image = game.images[name] as HTMLImageElement
         this.w = this.image.width
         this.h = this.image.height
 
@@ -24,7 +38,7 @@ class Sprite {
         this.fired = false
     }
 
-    hasPoint = (x, y) => {
+    hasPoint = (x: number, y: number) => {
         let xIn = x >= this.x && x <= this.x + this.w
         let yIn = y >= this.y && y <= this.y + this.h
         return xIn && yIn
@@ -51,17 +65,17 @@ class Sprite {
         this.game.canvas.addEventListener('mouseup', () => this.enableDrag = false)
     }
 
-    collide = (b) => {
+    collide = (b: Sprite) => {
         return collide(this, b)
     }
 
     move = () => {}
 
-    moveX = (x) => {
+    moveX = (x: number) => {
         this.x = x
     }
 
-    moveY = (y) => {
+    moveY = (y: number) => {
         this.y = y
     }
 
@@ -81,11 +95,11 @@ class Sprite {
         this.moveX(this.x + this.speed)
     }
 
-    moveXInSide = (x) => {
+    moveXInSide = (x: number) => {
         this.x = rangeLimit(x, 0, this.game.width - this.w)
     }
 
-    moveYInSide = (y) => {
+    moveYInSide = (y: number) => {
         this.y = rangeLimit(y, 0, this.game.height - this.w)
     }
 

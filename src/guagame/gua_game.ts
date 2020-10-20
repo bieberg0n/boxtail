@@ -75,6 +75,10 @@ export default class GuaGame {
         this.context.drawImage(img.image, img.x, img.y)
     }
 
+    drawImagePart(img: Img, x: number, y: number, width: number, height: number) {
+        this.context.drawImage(img.image, x, y, width, height, img.x, img.y, width, height)
+    }
+
     drawImages(imgs: Img[]) {
         imgs.forEach(img => this.drawImage(img))
     }

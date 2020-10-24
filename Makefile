@@ -8,3 +8,6 @@ dep_cowboy_commit = 2.8.0
 DEP_PLUGINS = cowboy
 
 include erlang.mk
+
+dev:
+	nodemon --watch "src/" -e erl --exec "rebar3 compile && erl -pa `rebar3 path` -noshell -s boxtail start"

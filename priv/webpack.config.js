@@ -22,7 +22,7 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
-                {from: "./game.html"}
+                {from: "**/*", context: "public"}
             ]
         })
     ]

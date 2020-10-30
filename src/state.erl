@@ -10,14 +10,16 @@
 -author("bj").
 
 -behavior(gen_server).
+-include_lib("players.hrl").
+-import(utils, [log/1, log/2]).
 
 %% API
 -export([
 	start/0,
 	stop/0,
 	add/1,
-	remove/1,
-	broadcast/1,
+	remove/0,
+	update/2,
 	init/1,
 	handle_call/3,
 	handle_info/2,
@@ -30,36 +32,50 @@ start() ->
 stop() ->
 	gen_server:call(?MODULE, stop).
 
-add(Who) ->
-	gen_server:call(?MODULE, {add, Who}).
+add(Name) ->
+	gen_server:call(?MODULE, {add, Name}).
 
-remove(Who) ->
-	gen_server:call(?MODULE, {remove, Who}).
+remove() ->
+	gen_server:call(?MODULE, {remove}).
 
-broadcast(Msg) ->
-	gen_server:call(?MODULE, {broadcast, Msg}).
+update(Events, CancelEvents) ->
+	gen_server:call(?MODULE, {update, Events, CancelEvents}).
+
 
 init([]) ->
-	timer:send_interval(1000, {broadcast, "test"}),
-	{ok, []}.
+	timer:send_interval(1000, tick),
+	{ok,
+		{
+			{players, maps:new()},
+			{sprites, []}}
+	}.
 
+handle_info(tick, State) ->
+	{{players, Players}, S} = State,
+	NewPlayers = players:players_do(Players),
+	players:broadcast(NewPlayers),
+	{noreply, {{players, NewPlayers}, S}}.
 
-handle_info({broadcast, Msg}, L) ->
-	io:format("broad: ~p~p~n", [Msg, L]),
-	lists:map(fun({Pid, _Name}) -> Pid ! {text, Msg} end, L),
-	{noreply, L}.
+handle_call({add, Name}, {Pid, _Tag}, State) ->
+	{{players, P}, S} = State,
+	PP = P#{Pid => #{
+		x => 100,
+		y => 100,
+		name => Name,
+		status => []
+	}},
+	{reply, ok, {{players, PP}, S}};
 
+handle_call({remove}, {Pid, _Tag}, State) ->
+	{{players, P}, S} = State,
+	PP = maps:remove(Pid, P),
+	{reply, ok, {{players, PP}, S}};
 
-handle_call({add, Who}, _From, L) ->
-	{reply, ok, [Who | L]};
-
-handle_call({remove, Who}, _From, L) ->
-	{reply, ok, L -- [Who]};
-
-handle_call({broadcast, Msg}, _From, L) ->
-	io:format("broad: ~p~p~n", [Msg, L]),
-	lists:map(fun(P) -> P ! Msg end, L),
-	{reply, ok, L}.
+handle_call({update, Events, _CancelEvents}, {Pid, _Tag}, State) ->
+	{{players, Players}, S} = State,
+	#{Pid := Player} = Players,
+	NewPlayers = Players#{Pid := Player#{status := Events}},
+	{reply, ok, {{players, NewPlayers}, S}}.
 
 handle_cast(_Msg, State) ->
 	{noreply, State}.

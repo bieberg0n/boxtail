@@ -10,4 +10,4 @@ DEP_PLUGINS = cowboy
 include erlang.mk
 
 dev:
-	nodemon --watch "src/" -e erl --exec "rebar3 compile && erl -pa `rebar3 path` -noshell -s boxtail start"
+	nodemon --watch "src/" -e erl --exec "rebar3 dialyzer && echo \"boxtail start\" && erl -pa `rebar3 path` -noshell -s boxtail start"

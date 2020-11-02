@@ -16,3 +16,4 @@ rel/example_project
 _rel/
 .erlang.mk/
 _build/
+*/dist/

@@ -17,8 +17,8 @@ module.exports = {
     },
     plugins: [
         new htmlWebpackPlugin({
-            filename: 'game.html',
-            template: './public/game.html',
+            filename: 'dev.html',
+            template: './public/dev.html',
         }),
         new CopyWebpackPlugin({
             patterns: [

@@ -1,17 +1,13 @@
-import {GuaGame, GuaScene, Sprite} from "../../guagame";
-
-enum Direction {
-    down = 'down',
-    up = 'up',
-    left = 'left',
-    right = 'right',
-}
+import {Boxtail, Direction} from '../../index'
+import {Sprite} from "../../guagame";
+import {SceneMain} from '../index'
 
 export default class People extends Sprite {
-    scene: GuaScene
+    game: Boxtail
+    scene: SceneMain
     direction: Direction
 
-    constructor (game: GuaGame, scene: GuaScene) {
+    constructor (game: Boxtail, scene: SceneMain) {
         super(game, 'people')
 
         this.game = game
@@ -23,26 +19,16 @@ export default class People extends Sprite {
         this.speed = 15
         this.direction = Direction.down
 
-        game.bindKeyPress('a', () => {
-            this.direction = Direction.left
-            this.moveLeftInside()
-        })
-        game.bindKeyPress('d', () => {
-            this.direction = Direction.right
-            this.moveRightInside()
-        })
-        game.bindKeyPress('w', () => {
-            this.direction = Direction.up
-            this.moveUpInside()
-        })
-        game.bindKeyPress('s', () => {
-            this.direction = Direction.down
-            this.moveDownInside()
+        game.bindKeyEvent({
+            'a': 'left',
+            'd': 'right',
+            'w': 'up',
+            's': 'down',
         })
     }
 
-    mapDirectPos = () => {
-        let direction = this.direction
+    mapDirectPos = (direction: Direction) => {
+        // let direction = this.direction
         if (direction === Direction.down) {
             return [3, 4]
         } else if (direction === Direction.left) {
@@ -55,8 +41,14 @@ export default class People extends Sprite {
     }
 
     draw = () => {
-        // this.game.drawImage(this)
-        let [x, y] = this.mapDirectPos()
-        this.game.drawImagePart(this, x, y, this.w, this.h)
+        for (let p of this.game.peoples) {
+            // let me = peoples[0]
+            this.x = p.x
+            this.y = p.y
+            // this.direction = p.direction
+            let [x, y] = this.mapDirectPos(p.direction)
+            this.game.drawImagePart(this, x, y, this.w, this.h)
+            this.game.drawText(p.name, this.x, this.y)
+        }
     }
 }

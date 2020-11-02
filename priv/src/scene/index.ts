@@ -1,14 +1,16 @@
-import {GuaGame, GuaScene, Sprite} from '../guagame'
+import {GuaScene, Sprite, log} from '../guagame'
 import People from './sprite/people'
+import {Boxtail} from "../index";
 
-export default class SceneMain extends GuaScene {
+export class SceneMain extends GuaScene {
+    game: Boxtail
     gamestart: boolean
     gameover: boolean
     sprites: Sprite[]
 
-    constructor(game: GuaGame) {
+    constructor(game: Boxtail) {
         super(game)
-
+        this.game = game
         this.gamestart = false
         this.gameover = false
         this.sprites = [
@@ -16,21 +18,6 @@ export default class SceneMain extends GuaScene {
         ]
     }
 
-    // sprites = () => {
-    //     return [
-    //     ]
-    // }
-
-    toEnd = () => {
-        // this.aircraft.break()
-        this.gameover = true
-        //
-        // let ts = ['a', 's', 'w', 'd']
-        // ts.forEach(t => this.game.unBindKey(t))
-        //
-        // let scene = new SceneMain(this.game)
-        // this.game.bindKeyDown('r', () => this.game.replaceScene(scene))
-    }
 
     drawBackground = () => {
         let ctx = this.game.context

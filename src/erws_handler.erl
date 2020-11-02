@@ -17,14 +17,13 @@ init(Req, Opts) ->
 
 
 websocket_init(State) ->
-	state:add(<<"BJ">>),
+	state:add(anonymous),
 	{ok, State}.
 
 websocket_handle({text, DataRaw}, State) ->
 	Data = jsone:decode(DataRaw),
-	#{<<"e">> := Events, <<"ce">> := CancelEvents} = Data,
-	log("events: ~p, ~p~n", [Events, CancelEvents]),
-	state:update(bins_to_atoms(Events), bins_to_atoms(CancelEvents)),
+	log("events: ~p~n", [Data]),
+	lists:map(fun(Key) -> state:update(binary_to_atom(Key, utf8), maps:get(Key, Data)) end, maps:keys(Data)),
 	{ok, State}.
 
 

@@ -5,5 +5,8 @@
 	status = [] :: [atom()]
 }).
 
--type player() :: #{x => integer(), y => integer(), name => string(), status => [atom()]}.
+-type direction() :: left | right | up | down.
+
+-type player() :: #{x => integer(), y => integer(), name => string(), status => [atom()], direction => direction()}.
+
 -type players() :: #{pid() => player()}.

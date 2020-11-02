@@ -18,14 +18,21 @@
 	broadcast/1
 ]).
 
+-define(SPEED, 10).
 
 -spec player_do_status(player(), atom()) -> player().
 player_do_status(P, right) ->
 	#{x := X} = P,
-	P#{x := X + 15};
+	P#{x := X + ?SPEED, direction := right};
 player_do_status(P, left) ->
 	#{x := X} = P,
-	P#{x := X - 15};
+	P#{x := X - ?SPEED, direction := left};
+player_do_status(P, up) ->
+	#{y := Y} = P,
+	P#{y := Y - ?SPEED, direction := up};
+player_do_status(P, down) ->
+	#{y := Y} = P,
+	P#{y := Y + ?SPEED, direction := down};
 player_do_status(P, undefined) ->
 	P;
 player_do_status(P, Status) ->
@@ -45,12 +52,12 @@ player_do(P) ->
 	player_do(P, Status).
 
 -spec players_do(players(), [pid()], players()) -> players().
-players_do(Players, [PlayerPid|PlayerPids], NewPlayers) ->
-	#{PlayerPid := Player} = Players,
-	NewPlayer = player_do(Player),
-	players_do(Players, PlayerPids, NewPlayers#{PlayerPid => NewPlayer});
 players_do(_Players, [], NewPlayers) ->
-	NewPlayers.
+	NewPlayers;
+players_do(Players, [Pid|Pids], NewPlayers) ->
+	#{Pid := Player} = Players,
+	NewPlayer = player_do(Player),
+	players_do(Players, Pids, NewPlayers#{Pid => NewPlayer}).
 
 -spec players_do(players()) -> players().
 players_do(Players) ->

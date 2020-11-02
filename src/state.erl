@@ -38,12 +38,15 @@ add(Name) ->
 remove() ->
 	gen_server:call(?MODULE, {remove}).
 
-update(Events, CancelEvents) ->
-	gen_server:call(?MODULE, {update, Events, CancelEvents}).
+-spec update(atom(), atom() | [atom()]) -> ok.
+update(name, Name) ->
+	gen_server:call(?MODULE, {update, name, Name});
+update(events, Events) ->
+	gen_server:call(?MODULE, {update, events, Events}).
 
 
 init([]) ->
-	timer:send_interval(1000, tick),
+	timer:send_interval(25, tick),
 	{ok,
 		{
 			{players, maps:new()},
@@ -62,7 +65,8 @@ handle_call({add, Name}, {Pid, _Tag}, State) ->
 		x => 100,
 		y => 100,
 		name => Name,
-		status => []
+		status => [],
+		direction => down
 	}},
 	{reply, ok, {{players, PP}, S}};
 
@@ -71,7 +75,14 @@ handle_call({remove}, {Pid, _Tag}, State) ->
 	PP = maps:remove(Pid, P),
 	{reply, ok, {{players, PP}, S}};
 
-handle_call({update, Events, _CancelEvents}, {Pid, _Tag}, State) ->
+handle_call({update, name, NameRaw}, {Pid, _Tag}, State) ->
+	Name = binary_to_atom(NameRaw, utf8),
+	{{players, Players}, S} = State,
+	#{Pid := Player} = Players,
+	NewPlayers = Players#{Pid := Player#{name := Name}},
+	{reply, ok, {{players, NewPlayers}, S}};
+handle_call({update, events, EventsRaw}, {Pid, _Tag}, State) ->
+	Events = utils:bins_to_atoms(EventsRaw),
 	{{players, Players}, S} = State,
 	#{Pid := Player} = Players,
 	NewPlayers = Players#{Pid := Player#{status := Events}},

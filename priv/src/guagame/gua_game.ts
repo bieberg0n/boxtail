@@ -12,7 +12,7 @@ export default class GuaGame {
     width: number
     height: number
     debug: boolean
-    images: {[key: string]: string | HTMLImageElement}
+    images: {[key: string]: HTMLImageElement}
     scene: GuaScene | null
     keyDownActions: {[key: string]: null | (() => void)}
     keyPressActions: {[key: string]: (() => void) | null}
@@ -73,10 +73,6 @@ export default class GuaGame {
 
     drawImage(img: Img) {
         this.context.drawImage(img.image, img.x, img.y)
-    }
-
-    drawImagePart(img: Img, x: number, y: number, width: number, height: number) {
-        this.context.drawImage(img.image, x, y, width, height, img.x, img.y, width, height)
     }
 
     drawImages(imgs: Img[]) {

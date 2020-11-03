@@ -3,6 +3,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
     entry:  './src/index.ts',
+    mode: 'development',
     module: {
         rules: [
             {
@@ -17,13 +18,13 @@ module.exports = {
     },
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: path.resolve(__dirname, 'public')
     },
     plugins: [
-        new CopyWebpackPlugin({
-            patterns: [
-                {from: "**/*", context: "public"}
-            ]
-        })
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         {from: "**/*", context: "public"}
+        //     ]
+        // })
     ]
 }

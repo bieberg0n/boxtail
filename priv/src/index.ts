@@ -11,6 +11,7 @@ export enum Direction {
 
 interface People {
     name: string
+    role: string
     status: string[]
     x: number
     y: number
@@ -22,6 +23,7 @@ type strMap = {[key: string]: string}
 export class Boxtail extends GuaGame {
     ws: WebSocket
     name: string
+    role: string
     peoples: People[]
     keyEventMap: strMap
     events: Set<string>
@@ -30,7 +32,8 @@ export class Boxtail extends GuaGame {
         super(fps, width, height, debug)
 
         this.ws = this.initWs()
-        this.name = 'bj'
+        this.name = 'Nico'
+        this.role = 'nico'
         this.peoples = []
         this.keyEventMap = {}
         this.events = new Set()
@@ -39,6 +42,11 @@ export class Boxtail extends GuaGame {
             let input = event.target as HTMLInputElement
             this.name = input.value
             this.pushName()
+        })
+        e('#id-select-role')!.addEventListener('change', (event) => {
+            let select = event.target as HTMLSelectElement
+            this.role = select.value
+            this.pushRole()
         })
     }
 
@@ -54,14 +62,21 @@ export class Boxtail extends GuaGame {
         return ws
     }
 
-    pushName = () => {
-        let data = {name: this.name}
+    push = (data: {[key: string]: any}) => {
         this.ws.send(JSON.stringify(data))
+    }
+
+    pushName = () => {
+        this.push({name: this.name})
+    }
+
+    pushRole = () => {
+        this.push({role: this.role})
     }
 
     pushEvents = () => {
         let data = {events: Array.from(this.events)}
-        this.ws.send(JSON.stringify(data))
+        this.push(data)
     }
 
     bindKeyEvent = (map: strMap) => {
@@ -110,17 +125,25 @@ export class Boxtail extends GuaGame {
         setInterval(this.runloop, 1000/this.fps)
     }
 
+    drawImagePart(img: HTMLImageElement, imgX: number, imgY: number, width: number, height: number, x: number, y: number) {
+        // Image, image左上角x, image左上角y，image绘制宽度, image绘制高度, 绘到canvas的位置x, y, 绘制到canvas的宽高
+        this.context.drawImage(img, imgX, imgY, width, height, x, y, width, height)
+    }
+
     drawText = (text:string, x: number, y: number) => {
         let ctx = this.context
         ctx.fillStyle = '#000'
         ctx.font = '20px anti-serif'
-        ctx.fillText(text, x, y - 10)
+        ctx.fillText(text, x, y)
     }
 }
 
 const main = async function() {
     let imgs = {
-        'people': 'img/people.png'
+        nico: 'img/nico.png',
+        miku: 'img/miku.png',
+        minalinsky: 'img/minalinsky.png',
+        bilibili: 'img/bilibili.png',
     }
 
     let game = new Boxtail(30, 800,600 , true)

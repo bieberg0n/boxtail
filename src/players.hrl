@@ -7,6 +7,6 @@
 
 -type direction() :: left | right | up | down.
 
--type player() :: #{x => integer(), y => integer(), name => string(), status => [atom()], direction => direction()}.
+-type player() :: #{x => integer(), y => integer(), name => string(), role => atom(), status => [atom()], direction => direction()}.
 
 -type players() :: #{pid() => player()}.

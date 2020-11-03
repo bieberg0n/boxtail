@@ -42,11 +42,13 @@ remove() ->
 update(name, Name) ->
 	gen_server:call(?MODULE, {update, name, Name});
 update(events, Events) ->
-	gen_server:call(?MODULE, {update, events, Events}).
+	gen_server:call(?MODULE, {update, events, Events});
+update(role, Role) ->
+	gen_server:call(?MODULE, {update, role, Role}).
 
 
 init([]) ->
-	timer:send_interval(25, tick),
+	timer:send_interval(20, tick),
 	{ok,
 		{
 			{players, maps:new()},
@@ -65,6 +67,7 @@ handle_call({add, Name}, {Pid, _Tag}, State) ->
 		x => 100,
 		y => 100,
 		name => Name,
+		role => nico,
 		status => [],
 		direction => down
 	}},
@@ -80,6 +83,12 @@ handle_call({update, name, NameRaw}, {Pid, _Tag}, State) ->
 	{{players, Players}, S} = State,
 	#{Pid := Player} = Players,
 	NewPlayers = Players#{Pid := Player#{name := Name}},
+	{reply, ok, {{players, NewPlayers}, S}};
+handle_call({update, role, RoleRaw}, {Pid, _Tag}, State) ->
+	Role = binary_to_atom(RoleRaw, utf8),
+	{{players, Players}, S} = State,
+	#{Pid := Player} = Players,
+	NewPlayers = Players#{Pid := Player#{role := Role}},
 	{reply, ok, {{players, NewPlayers}, S}};
 handle_call({update, events, EventsRaw}, {Pid, _Tag}, State) ->
 	Events = utils:bins_to_atoms(EventsRaw),

@@ -18,7 +18,7 @@
 	broadcast/1
 ]).
 
--define(SPEED, 10).
+-define(SPEED, 5).
 
 -spec player_do_status(player(), atom()) -> player().
 player_do_status(P, right) ->

@@ -9,9 +9,9 @@ start(_Type, _Args) ->
 
 	Dispatch = cowboy_router:compile([
 		{'_', [
-			{"/", cowboy_static, {priv_file, boxtail, "dist/game.html"}},
+			{"/", cowboy_static, {priv_file, boxtail, "public/game.html"}},
 			{"/websocket", erws_handler, []},
-			{"/[...]", cowboy_static, {priv_dir, boxtail, "dist"}}
+			{"/[...]", cowboy_static, {priv_dir, boxtail, "public"}}
 		]}
 	]),
 	{ok, _} = cowboy:start_clear(http,

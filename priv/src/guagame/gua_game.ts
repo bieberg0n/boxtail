@@ -9,6 +9,7 @@ interface Img {
 
 export default class GuaGame {
     fps: number
+    stausTime: number
     width: number
     height: number
     debug: boolean
@@ -22,6 +23,7 @@ export default class GuaGame {
 
     constructor(fps: number, width=400, height=300, debug=false) {
         this.fps = fps
+        this.stausTime = 0
         this.width = width
         this.height = height
         this.debug = debug

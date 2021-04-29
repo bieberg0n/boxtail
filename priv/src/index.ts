@@ -51,7 +51,7 @@ export class Boxtail extends GuaGame {
     }
 
     initWs = () => {
-        const ws = new WebSocket('ws://192.168.1.4:8080/websocket')
+        const ws = new WebSocket('ws://127.0.0.1:8080/websocket')
         ws.onopen = (_event) => {
             this.pushName()
         }
